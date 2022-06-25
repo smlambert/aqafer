@@ -26,7 +26,7 @@ jobs:
       with: 
         jdksource: 'customized'
         customizedSdkUrl: ${{ env.CUSTOMIZED_SDK_URL }} 
-        aqa-testsRepo: 'adoptium/aqa-tests:v0.8.0-release' # Make sure this branch is set to the latest release branch
+        aqa-testsRepo: 'adoptium/aqa-tests:v0.9.1-release' # Make sure this branch is set to the latest release branch
         build_list: ${{ matrix.suite }}
         target: _${{ matrix.target }}.${{ matrix.suite }}
 
