@@ -30,6 +30,7 @@ jobs:
           customizedSdkUrl: ${{ inputs.customizedSdkUrl }}
           aqa-testsRepo: 'adoptium/aqa-tests:v0.9.1-release'
           build_list: ${{ matrix.suite }} # parallellist to generate
+          run_parallel: ${{ inputs.runParallel }}
           
       - name: Archive parallellist
         uses: actions/upload-artifact@v2
