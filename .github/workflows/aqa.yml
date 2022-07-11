@@ -32,7 +32,7 @@ jobs:
           build_list: ${{ matrix.suite }} # parallellist to generate
           run_parallel: ${{ inputs.runParallel }}
           
-      - name: Archive parallellist
+      - name: Archive parallelList
         uses: actions/upload-artifact@v2
         with:
           name: ${{ matrix.suite }}-parallelList.mk
@@ -45,15 +45,15 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        target: ['-f parallellist.mk'] 
+        target: ['-f parallelList.mk'] 
         test_list: ['testList_0', 'testList_1', 'testList_2'] # numlist is hardcoded...for now
         suite: [functional, openjdk, system, perf]
     steps:
         # this would need to be in the dir where we run tests....
-      - name: download parallellist
+      - name: download parallelList
         uses: actions/download-artifact@v2
         with: 
-          name: ${{ matrix.suite }}-parallellist.mk
+          name: ${{ matrix.suite }}-parallelList.mk
           path: ./
 
       - name: Run AQA Tests Parallel - ${{ matrix.test_list }}
@@ -63,12 +63,12 @@ jobs:
           customizedSdkUrl: ${{ inputs.customizedSdkUrl }}
           aqa-testsRepo: 'adoptium/aqa-tests:v0.9.1-release'
           build_list: ${{ matrix.suite }}
-          target : ${{ matrix.target }} ${{ matrix.testList }}
+          target : ${{ matrix.target }} ${{ matrix.test_list }}
 
       - uses: actions/upload-artifact@v2
         if: always() # Always run this step (even if the tests failed)
         with:
-          name: test_output_${{ matrix.test_list }}
+          name: test_output_${{ matrix.suite }}_${{ matrix.test_list }}
           path: ./**/output_*/*.tap
 
   run_aqa:
