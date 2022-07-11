@@ -10,13 +10,21 @@ on:
         description: Run parallel jobs
         required: true
         type: boolean
+      runner:
+        description: runner
+        required: true
+        type: choice
+        options:
+          - ubuntu-latest
+          - windows-2019
+          - macos-10.15
 
 env:  # Links to the JDK build under test and the native test libs
   USE_TESTENV_PROPERTIES: true
   
 jobs:
   setup-parallel:
-    runs-on: ubuntu-latest
+    runs-on: ${{ inputs.runner }}
     if: ${{ inputs.runParallel == true }}
     strategy:
       fail-fast: true
@@ -39,7 +47,7 @@ jobs:
           path: ${{ github.workspace }}/aqa-tests/TKG/parallelList.mk
 
   run_aqa_parallel:
-    runs-on: ubuntu-latest
+    runs-on: ${{ inputs.runner }}
     if: ${{ inputs.runParallel == true }}
     needs: setup-parallel
     strategy:
@@ -72,7 +80,7 @@ jobs:
           path: ./**/output_*/*.tap
 
   run_aqa:
-    runs-on: ubuntu-latest
+    runs-on: ${{ inputs.runner }}
     if: ${{ inputs.runParallel != true }}
     strategy:
       fail-fast: false
