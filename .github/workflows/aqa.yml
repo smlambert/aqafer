@@ -39,7 +39,7 @@ jobs:
           aqa-testsRepo: 'adoptium/aqa-tests:v0.9.1-release'
           build_list: ${{ matrix.suite }} # parallellist to generate
           run_parallel: ${{ inputs.runParallel }}
-          num_machines: 4 # must update test list in next job..for now
+          num_machines: 5 # must update test list in next job..for now
           
       - name: Archive parallelList
         uses: actions/upload-artifact@v2
