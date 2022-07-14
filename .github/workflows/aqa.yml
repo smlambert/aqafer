@@ -36,7 +36,7 @@ jobs:
         with:
           jdksource: 'customized'
           customizedSdkUrl: ${{ inputs.customizedSdkUrl }}
-          aqa-testsRepo: 'adoptium/aqa-tests:v0.9.1-release'
+          aqa-testsRepo: 'adoptium/aqa-tests:v0.9.3-release'
           build_list: ${{ matrix.suite }} # parallellist to generate
           run_parallel: ${{ inputs.runParallel }}
           num_machines: 5 # must update test list in next job..for now
@@ -70,7 +70,7 @@ jobs:
         with:
           jdksource: 'customized'
           customizedSdkUrl: ${{ inputs.customizedSdkUrl }}
-          aqa-testsRepo: 'adoptium/aqa-tests:v0.9.1-release'
+          aqa-testsRepo: 'adoptium/aqa-tests:v0.9.3-release'
           build_list: ${{ matrix.suite }}
           target : ${{ matrix.target }} ${{ matrix.test_list }}
 
@@ -98,7 +98,7 @@ jobs:
       with: 
         jdksource: 'customized'
         customizedSdkUrl: ${{ inputs.customizedSdkUrl }} 
-        aqa-testsRepo: 'adoptium/aqa-tests:v0.9.1-release' # Make sure this branch is set to the latest release branch
+        aqa-testsRepo: 'adoptium/aqa-tests:v0.9.3-release' # Make sure this branch is set to the latest release branch
         build_list: ${{ matrix.suite }}
         target: _${{ matrix.target }}.${{ matrix.suite }}
 
