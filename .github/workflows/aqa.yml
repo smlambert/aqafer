@@ -39,7 +39,7 @@ jobs:
           aqa-testsRepo: 'adoptium/aqa-tests:v0.9.3-release'
           build_list: ${{ matrix.suite }} # parallellist to generate
           run_parallel: ${{ inputs.runParallel }}
-          num_machines: 5 # must update test list in next job..for now
+          num_machines: 4
           
       - name: Archive parallelList
         uses: actions/upload-artifact@v2
@@ -47,32 +47,30 @@ jobs:
           name: ${{ matrix.suite }}-parallelList.mk
           path: ${{ github.workspace }}/aqa-tests/TKG/parallelList.mk
 
-  run_aqa_parallel:
+  run-aqa-parallel:
     runs-on: ${{ inputs.runner }}
     if: ${{ inputs.runParallel == true }}
     needs: setup-parallel
     strategy:
       fail-fast: false
-      matrix:
-        target: ['-f parallelList.mk'] 
+      matrix: 
         test_list: ['testList_0', 'testList_1', 'testList_2', 'testList_3'] # numlist is hardcoded...for now
         suite: [functional, openjdk, system, perf]
     steps:
-        # this would need to be in the dir where we run tests....
-      - name: download parallelList
+      - name: Download parallelList
         uses: actions/download-artifact@v2
         with: 
           name: ${{ matrix.suite }}-parallelList.mk
           path: ./
 
-      - name: Run AQA Tests Parallel - ${{ matrix.test_list }}
+      - name: Run AQA Tests Parallel - ${{ matrix.suite }}_${{ matrix.test_list }}
         uses: j-braley/run-aqa@v2.0.1
         with:
           jdksource: 'customized'
           customizedSdkUrl: ${{ inputs.customizedSdkUrl }}
           aqa-testsRepo: 'adoptium/aqa-tests:v0.9.3-release'
           build_list: ${{ matrix.suite }}
-          target : ${{ matrix.target }} ${{ matrix.test_list }}
+          target : -f parallelList.mk ${{ matrix.test_list }}
 
       - uses: actions/upload-artifact@v2
         if: always() # Always run this step (even if the tests failed)
