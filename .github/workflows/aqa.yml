@@ -26,13 +26,14 @@ jobs:
   setup-parallel:
     runs-on: ${{ inputs.runner }}
     if: ${{ inputs.runParallel == true }}
+    name: setup-parallel - ${{ inputs.runner }}_${{ matrix.suite }}
     strategy:
       fail-fast: true
       matrix:
         suite: [functional, openjdk, system, perf]
     steps:
       - uses: j-braley/run-aqa@v2.0.1
-        name: Generate parallelList
+        name: Generate parallelList - ${{ matrix.suite }}
         with:
           jdksource: 'customized'
           customizedSdkUrl: ${{ inputs.customizedSdkUrl }}
@@ -41,7 +42,7 @@ jobs:
           run_parallel: ${{ inputs.runParallel }}
           num_machines: 4
           
-      - name: Archive parallelList
+      - name: Archive parallelList - ${{ matrix.suite }}
         uses: actions/upload-artifact@v2
         with:
           name: ${{ matrix.suite }}-parallelList.mk
@@ -51,19 +52,20 @@ jobs:
     runs-on: ${{ inputs.runner }}
     if: ${{ inputs.runParallel == true }}
     needs: setup-parallel
+    name: Run AQAvit ${{ inputs.runner }} - _${{ matrix.suite }}.${{ matrix.test_list }}
     strategy:
       fail-fast: false
       matrix: 
         test_list: ['testList_0', 'testList_1', 'testList_2', 'testList_3'] # numlist is hardcoded...for now
         suite: [functional, openjdk, system, perf]
     steps:
-      - name: Download parallelList
+      - name: Download parallelList - ${{ matrix.suite }}
         uses: actions/download-artifact@v2
         with: 
           name: ${{ matrix.suite }}-parallelList.mk
           path: ./
 
-      - name: Run AQA Tests Parallel - ${{ matrix.suite }}_${{ matrix.test_list }}
+      - name: Run AQA Parallel Test - ${{ matrix.suite }}_${{ matrix.test_list }}
         uses: j-braley/run-aqa@v2.0.1
         with:
           jdksource: 'customized'
