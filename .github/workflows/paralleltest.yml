@@ -64,7 +64,7 @@ jobs:
         test_list: ['testList_0', 'testList_1', 'testList_2', 'testList_3', 'testList_4'] # numlist is hardcoded   
     steps:
         # download the paralleList to the current working directory
-      name: Download parallelList - extended.openjdk
+      - name: Download parallelList - extended.openjdk
         uses: actions/download-artifact@v2
         with:
           name: extended.openjdk-parallelList.mk
