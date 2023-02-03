@@ -69,21 +69,6 @@ jobs:
         with:
           name: extended.openjdk-parallelList.mk
           path: ./
-      
-      - name: Run AQA Tests - ${{ matrix.target }}.${{ matrix.suite }}
-      uses: adoptium/run-aqa@v2
-      with: 
-        jdksource: 'customized'
-        customizedSdkUrl: ${{ inputs.customizedSdkUrl }} 
-        aqa-testsRepo: 'adoptium/aqa-tests:v0.9.6-release' # Make sure this branch is set to the latest release branch
-        build_list: ${{ matrix.suite }}
-        target: _${{ matrix.target }}.${{ matrix.suite }}
-        
-      - uses: actions/upload-artifact@v2
-      if: always() # Always run this step (even if the tests failed)
-      with:
-        name: test_output
-        path: ./**/output_*/*.tap
         
       - name: Run AQA Parallel Test - extended.openjdk_${{ matrix.test_list }}
         uses: adoptium/run-aqa@v2
