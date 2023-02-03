@@ -62,8 +62,7 @@ jobs:
       fail-fast: false
       matrix:
         test_list: ['testList_0', 'testList_1', 'testList_2', 'testList_3', 'testList_4'] # numlist is hardcoded   
-    steps:
-        # download the paralleList to the current working directory
+    steps: 
       - name: Download parallelList - extended.openjdk
         uses: actions/download-artifact@v2
         with:
