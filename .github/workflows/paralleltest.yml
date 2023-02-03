@@ -18,14 +18,6 @@ on:
           - ubuntu-latest
           #- windows-2019
           #- macos-11
-      matrix:
-        target: [sanity]
-        suite: [functional, openjdk, system, perf]
-        include:
-          - target: [extended]
-            suite: [functional, system]
-          - target: special
-            suite: functional
         
 jobs:
   setup-parallel:
