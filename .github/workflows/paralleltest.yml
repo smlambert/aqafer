@@ -1,5 +1,5 @@
-name: Run AQAvit verification targets in parallel
-
+# Run the AQAvit test targets used for verification
+name: AQAvit-Verification-Parallel
 on:
   workflow_dispatch: # Allows the job to be manually triggered
     inputs:
