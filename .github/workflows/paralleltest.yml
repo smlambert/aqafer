@@ -16,8 +16,8 @@ on:
         type: choice
         options:
           - ubuntu-latest
-          #- windows-2019
-          #- macos-11
+          - windows-2019
+          - macos-11
         
 jobs:
   setup-parallel:
@@ -49,7 +49,7 @@ jobs:
     runs-on: ${{ inputs.runner }}
     if: ${{ inputs.runParallel == true }}
     needs: setup-parallel
-    name: Run AQAvit ${{ inputs.runner }} - extended.openjdk.${{ matrix.test_list }}
+    name: Run AQAvit ${{ inputs.runner }} - extended.openjdk
     strategy:
       fail-fast: false
       matrix:
