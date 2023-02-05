@@ -42,7 +42,7 @@ jobs:
       - name: Archive parallelList - extended.openjdk
         uses: actions/upload-artifact@v2
         with:
-          name: extended.openjdk-parallelList.mk
+          name: parallelList.mk
           path: ${{ github.workspace }}/aqa-tests/TKG/parallelList.mk
           
   run-aqa-parallel:
@@ -58,7 +58,7 @@ jobs:
       - name: Download parallelList - extended.openjdk
         uses: actions/download-artifact@v2
         with:
-          name: extended.openjdk-parallelList.mk
+          name: parallelList.mk
           path: ./
 
       - name: Run AQA Parallel Test - extended.openjdk_${{ matrix.test_list }}
