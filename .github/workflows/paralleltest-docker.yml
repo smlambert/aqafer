@@ -40,7 +40,7 @@ jobs:
           aqa-testsRepo: ${{ inputs.aqatest-repo }}
           build_list: ${{ matrix.suite }}
           target: ${{ matrix.suite }} # parallellist to generate
-          run_parallel: ${{ inputs.runParallel }}
+          run_parallel: true
           num_machines: 4
 
       - name: Archive parallelList - ${{ matrix.suite }}
