@@ -60,7 +60,7 @@ jobs:
 
       - name: Generate parallelList non-windows - ${{ matrix.suite }}
         uses: adoptium/run-aqa@v2.0.1
-        if: ${{ inputs.system == 'windows' }}
+        if: ${{ inputs.system != 'windows' }}
         with:
           jdksource: 'customized'
           customizedSdkUrl: ${{ inputs.customizedSdkUrl }}
@@ -140,7 +140,7 @@ jobs:
 
       - name: Run AQA tests parallel (${{ inputs.system }}) - ${{ matrix.suite }}_${{ matrix.test_list }}
         uses: adoptium/run-aqa@v2.0.1
-        if: ${{ inputs.system == 'windows' }}
+        if: ${{ inputs.system != 'windows' }}
         with:
           jdksource: 'customized'
           customizedSdkUrl: ${{ inputs.customizedSdkUrl }}
