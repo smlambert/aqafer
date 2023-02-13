@@ -1,0 +1,90 @@
+name: Run AQAvit Paralleltest docker
+
+on:
+  workflow_dispatch: # Allows the job to be manually triggered
+    inputs:
+      customizedSdkUrl:
+         description: SDK download URL
+         required: true
+      testImage:
+        description: Native Libs
+        required: true
+      aqatest-repo:
+        description: adoptium/aqa-tests repository
+        required: true
+        type: string
+        default: 'adoptium/aqa-tests:v0.9.6-release'
+
+jobs:
+
+  setup-parallel-docker:
+    runs-on: ubuntu-latest
+    container:
+      image: ${{ secrets.CONTAINER_REGISTRY }}
+      env:
+        USE_TESTENV_PROPERTIES: true
+      options: --cpus 1
+      credentials:
+        username: ${{ secrets.ACR_TOKEN_NAME }}
+        password: ${{ secrets.AZURE_ACR_TOKEN_PASS1 }}
+    strategy:
+      fail-fast: true
+      matrix:
+        suite: [functional, openjdk, system, perf]
+    steps:
+
+      - uses: adoptium/run-aqa@v2.0.1
+        with:
+          jdksource: 'customized'
+          customizedSdkUrl: ${{ inputs.customizedSdkUrl }}
+          aqa-testsRepo: ${{ inputs.aqatest-repo }}
+          build_list: ${{ matrix.suite }}
+          target: ${{ matrix.suite }} # parallellist to generate
+          run_parallel: ${{ inputs.runParallel }}
+          num_machines: 4
+
+      - name: Archive parallelList - ${{ matrix.suite }}
+        uses: actions/upload-artifact@v2
+        with:
+          name: ${{ matrix.suite }}-parallelList.mk
+          path: ${{ github.workspace }}/aqa-tests/TKG/parallelList.mk
+
+  run-aqa-parallel-docker:
+    runs-on: ubuntu-latest
+    needs: setup-parallel-docker
+    container:
+      image: ${{ secrets.CONTAINER_REGISTRY }}
+      env:
+        USE_TESTENV_PROPERTIES: true
+      options: --cpus 1
+      credentials:
+        username: ${{ secrets.ACR_TOKEN_NAME }}
+        password: ${{ secrets.AZURE_ACR_TOKEN_PASS1 }}
+    strategy:
+      fail-fast: false
+      matrix:
+        test_list: ['testList_0', 'testList_1', 'testList_2', 'testList_3'] # numlist is hardcoded...for now
+        suite: [functional, openjdk, system, perf]
+    steps:
+
+      - name: Download parallelList - ${{ matrix.suite }}
+        uses: actions/download-artifact@v2
+        with:
+          name: ${{ matrix.suite }}-parallelList.mk
+          path: ./
+
+      - name: Run AQA tests parallel (${{ inputs.runner }}) - ${{ matrix.suite }}_${{ matrix.test_list }}
+        uses: adoptium/run-aqa@v2.0.1
+        if: ${{ inputs.runner != 'windows-2019' }}
+        with:
+          jdksource: 'customized'
+          customizedSdkUrl: ${{ inputs.customizedSdkUrl }}
+          aqa-testsRepo: ${{ inputs.aqatest-repo }}
+          build_list: ${{ matrix.suite }}
+          target : -f parallelList.mk ${{ matrix.test_list }}
+
+      - uses: actions/upload-artifact@v2
+        if: always() # Always run this step (even if the tests failed)
+        with:
+          name: test_output_${{ matrix.suite }}_${{ matrix.test_list }}
+          path: ./**/output_*/*.tap

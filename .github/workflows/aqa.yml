@@ -1,12 +1,12 @@
-name: Run AQAvit 
+name: Run AQAvit
 
 on:
   workflow_dispatch: # Allows the job to be manually triggered
 
 env:  # Links to the JDK build under test and the native test libs
   USE_TESTENV_PROPERTIES: true
-  CUSTOMIZED_SDK_URL: https://github.com/adoptium/temurin11-binaries/releases/download/jdk-11.0.14.1%2B1/OpenJDK11U-jdk_x64_linux_hotspot_11.0.14.1_1.tar.gz
-  
+  CUSTOMIZED_SDK_URL: https://aka.ms/download-jdk/microsoft-jdk-11.0.18-linux-x64.tar.gz
+
 jobs:
   run_aqa:
     runs-on: ubuntu-latest
@@ -22,11 +22,11 @@ jobs:
     steps:
 
     - name: Run AQA Tests - ${{ matrix.target }}.${{ matrix.suite }}
-      uses: adoptium/run-aqa@v2
-      with: 
+      uses: adoptium/run-aqa@v2.0.1
+      with:
         jdksource: 'customized'
-        customizedSdkUrl: ${{ env.CUSTOMIZED_SDK_URL }} 
-        aqa-testsRepo: 'adoptium/aqa-tests:v0.9.1-release' # Make sure this branch is set to the latest release branch
+        customizedSdkUrl: ${{ env.CUSTOMIZED_SDK_URL }}
+        aqa-testsRepo: 'adoptium/aqa-tests:v0.9.6-release' # Make sure this branch is set to the latest release branch
         build_list: ${{ matrix.suite }}
         target: _${{ matrix.target }}.${{ matrix.suite }}
 
