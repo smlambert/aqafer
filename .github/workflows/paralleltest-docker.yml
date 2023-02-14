@@ -14,12 +14,15 @@ on:
         required: true
         type: string
         default: 'adoptium/aqa-tests:v0.9.6-release'
+      containerRegistry:
+        description: Container registry
+        required: true
 
 jobs:
   setup-parallel-docker:
     runs-on: ubuntu-latest
     container:
-      image: ${{ secrets.CONTAINER_REGISTRY }}
+      image: ${{ inputs.containerRegistry }}
       env:
         USE_TESTENV_PROPERTIES: true
       options: --cpus 2
