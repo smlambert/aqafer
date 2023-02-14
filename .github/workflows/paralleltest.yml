@@ -27,9 +27,28 @@ env:  # Links to the JDK build under test and the native test libs
   USE_TESTENV_PROPERTIES: true
 
 jobs:
+  configuration:
+    runs-on: ubuntu-latest
+    outputs:
+      agent-config: ${{ steps.selection.outputs.config }}
+    steps:
+      - name: Select agent
+        id: selection
+        run: |
+          if [[ ${{ inputs.pool }} == "macos-x64" ]]; then
+            echo "config=[macos-10.15]" >> $GITHUB_OUTPUT
+          fi
+          if [[ ${{ inputs.pool }} == "macos-arm64" ]]; then
+            echo "config=['self-hosted', 'macOS', 'ARM64']" >> $GITHUB_OUTPUT
+          fi
+          if [[ ${{ inputs.pool }} == "*windows2019-x64*" ]] || [[ ${{ inputs.pool }} == "*windows2022-aarch64*" ]] || [[ ${{ inputs.pool }} == "*ubuntu20.04-x64*" ]] || [[ ${{ inputs.pool }} == "*ubuntu20.04-aarch64*" ]]; then
+            echo "config=['self-hosted', 1ES.Pool=${{ inputs.pool }}]" >> $GITHUB_OUTPUT
+          fi
+
   setup-parallel:
-    runs-on: [self-hosted, "1ES.Pool=${{ inputs.pool }}"]
+    runs-on: ${{ fromJSON(needs.configuration.outputs.agent-config) }}
     name: Create AQA parallelList - ${{ inputs.pool }}_${{ matrix.suite }}
+    needs: configuration
     strategy:
       fail-fast: true
       matrix:
