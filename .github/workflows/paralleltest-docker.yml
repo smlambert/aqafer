@@ -4,10 +4,10 @@ on:
   workflow_dispatch: # Allows the job to be manually triggered
     inputs:
       customizedSdkUrl:
-         description: SDK download URL
+         description: SDK URL
          required: true
       testImage:
-        description: Native Libs
+        description: Native Libs URL
         required: true
       aqatest-repo:
         description: adoptium/aqa-tests repository
@@ -16,14 +16,13 @@ on:
         default: 'adoptium/aqa-tests:v0.9.6-release'
 
 jobs:
-
   setup-parallel-docker:
     runs-on: ubuntu-latest
     container:
       image: ${{ secrets.CONTAINER_REGISTRY }}
       env:
         USE_TESTENV_PROPERTIES: true
-      options: --cpus 1
+      options: --cpus 2
       credentials:
         username: ${{ secrets.ACR_TOKEN_NAME }}
         password: ${{ secrets.AZURE_ACR_TOKEN_PASS1 }}
@@ -56,7 +55,7 @@ jobs:
       image: ${{ secrets.CONTAINER_REGISTRY }}
       env:
         USE_TESTENV_PROPERTIES: true
-      options: --cpus 1
+      options: --cpus 2
       credentials:
         username: ${{ secrets.ACR_TOKEN_NAME }}
         password: ${{ secrets.AZURE_ACR_TOKEN_PASS1 }}
@@ -73,9 +72,8 @@ jobs:
           name: ${{ matrix.suite }}-parallelList.mk
           path: ./
 
-      - name: Run AQA tests parallel (${{ inputs.runner }}) - ${{ matrix.suite }}_${{ matrix.test_list }}
+      - name: Run AQA Docker Paralleltest ${{ matrix.suite }}_${{ matrix.test_list }}
         uses: adoptium/run-aqa@v2.0.1
-        if: ${{ inputs.runner != 'windows-2019' }}
         with:
           jdksource: 'customized'
           customizedSdkUrl: ${{ inputs.customizedSdkUrl }}

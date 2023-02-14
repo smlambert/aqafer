@@ -4,7 +4,7 @@ on:
   workflow_dispatch: # Allows the job to be manually triggered
     inputs:
       customizedSdkUrl:
-        description: SDK download URL
+        description: SDK URL
         required: true
       aqatest-repo:
         description: adoptium/aqa-tests repository
@@ -79,7 +79,7 @@ jobs:
   run-aqa-parallel:
     runs-on: [self-hosted, "1ES.Pool=${{ inputs.pool }}"]
     needs: setup-parallel
-    name: Run AQAvit verification ${{ inputs.pool }} - _${{ matrix.suite }}.${{ matrix.test_list }}
+    name: Run AQAvit verification ${{ inputs.system }} - _${{ matrix.suite }}.${{ matrix.test_list }}
     strategy:
       fail-fast: false
       matrix:
