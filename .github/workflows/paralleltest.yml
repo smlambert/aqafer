@@ -66,6 +66,16 @@ jobs:
           $variable = "${{ github.workspace }}\tmp\$variable"
           echo "TEST_JDK_HOME=$variable" >> $env:GITHUB_ENV
 
+      - name: Setup non-windows environment
+        working-directory: ${{ github.workspace }}
+        if: ${{ inputs.system != 'windows' }}
+        shell: bash
+        run: |
+          curl -os ${{ inputs.system }}.tar.gz "${{ secrets.BASE_CONTAINER_URL }}${{ inputs.customizedSdkUrl }}${{ secrets.SAS_TOKEN }}"
+          tar -xzf ${{ inputs.system }}.tar.gz -C ./tmp
+          $variable = $(ls ./tmp)
+          echo "TEST_JDK_HOME=${{ github.workspace }}/tmp/$variable" >> $GITHUB_ENV
+
       - name: Generate parallelList windows - ${{ matrix.suite }}
         uses: adoptium/run-aqa@v2.0.1
         if: ${{ inputs.system == 'windows' }}
@@ -82,7 +92,7 @@ jobs:
         if: ${{ inputs.system != 'windows' }}
         with:
           jdksource: 'customized'
-          customizedSdkUrl: "${{ secrets.BASE_CONTAINER_URL }}${{ inputs.customizedSdkUrl }}${{ secrets.SAS_TOKEN }}"
+          # customizedSdkUrl: "${{ secrets.BASE_CONTAINER_URL }}${{ inputs.customizedSdkUrl }}${{ secrets.SAS_TOKEN }}"
           aqa-testsRepo: ${{ inputs.aqatest-repo }}
           build_list: ${{ matrix.suite }}
           target: ${{ matrix.suite }} # parallellist to generate
