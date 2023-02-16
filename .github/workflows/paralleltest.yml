@@ -36,13 +36,13 @@ jobs:
         id: selection
         run: |
           if [[ ${{ inputs.pool }} == "macos-x64" ]]; then
-            echo "config='["macos-10.15"]'" >> $GITHUB_OUTPUT
+            echo 'config="macos-11"' >> $GITHUB_OUTPUT
           fi
           if [[ ${{ inputs.pool }} == "macos-arm64" ]]; then
-            echo "config='["self-hosted", "macos", "ARM64"]'" >> $GITHUB_OUTPUT
+            echo "config=['self-hosted', 'macos', 'ARM64']" >> $GITHUB_OUTPUT
           fi
           if [[ ${{ inputs.pool }} == "*windows2019-x64*" ]] || [[ ${{ inputs.pool }} == "*windows2022-aarch64*" ]] || [[ ${{ inputs.pool }} == "*ubuntu20.04-x64*" ]] || [[ ${{ inputs.pool }} == "*ubuntu20.04-aarch64*" ]]; then
-            echo "config='["self-hosted", "1ES.Pool=${{ inputs.pool }}"]'" >> $GITHUB_OUTPUT
+            echo "config=['self-hosted', '1ES.Pool=${{ inputs.pool }}']" >> $GITHUB_OUTPUT
           fi
 
   setup-parallel:
