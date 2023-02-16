@@ -71,7 +71,7 @@ jobs:
         if: ${{ inputs.system != 'windows' }}
         shell: bash
         run: |
-          curl -os ${{ inputs.system }}.tar.gz "${{ secrets.BASE_CONTAINER_URL }}${{ inputs.customizedSdkUrl }}${{ secrets.SAS_TOKEN }}"
+          curl -s -o ${{ inputs.system }}.tar.gz "${{ secrets.BASE_CONTAINER_URL }}${{ inputs.customizedSdkUrl }}${{ secrets.SAS_TOKEN }}"
           tar -xzf ${{ inputs.system }}.tar.gz -C ./tmp
           $variable = $(ls ./tmp)
           echo "TEST_JDK_HOME=${{ github.workspace }}/tmp/$variable" >> $GITHUB_ENV
