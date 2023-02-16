@@ -72,6 +72,7 @@ jobs:
         shell: bash
         run: |
           curl -s -o ${{ inputs.system }}.tar.gz "${{ secrets.BASE_CONTAINER_URL }}${{ inputs.customizedSdkUrl }}${{ secrets.SAS_TOKEN }}"
+          mkdir tmp
           tar -xzf ${{ inputs.system }}.tar.gz -C ./tmp
           $variable = $(ls ./tmp)
           echo "TEST_JDK_HOME=${{ github.workspace }}/tmp/$variable" >> $GITHUB_ENV
