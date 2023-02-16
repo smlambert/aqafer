@@ -39,7 +39,7 @@ jobs:
             echo 'config="macos-11"' >> $GITHUB_OUTPUT
           fi
           if [[ ${{ inputs.pool }} == "macos-arm64" ]]; then
-            echo "config=['self-hosted', 'macos', 'ARM64']" >> $GITHUB_OUTPUT
+            echo "config=['self-hosted', 'macOS', 'ARM64']" >> $GITHUB_OUTPUT
           fi
           if [[ ${{ inputs.pool }} == "*windows2019-x64*" ]] || [[ ${{ inputs.pool }} == "*windows2022-aarch64*" ]] || [[ ${{ inputs.pool }} == "*ubuntu20.04-x64*" ]] || [[ ${{ inputs.pool }} == "*ubuntu20.04-aarch64*" ]]; then
             echo "config=['self-hosted', '1ES.Pool=${{ inputs.pool }}']" >> $GITHUB_OUTPUT
@@ -59,7 +59,7 @@ jobs:
         if: ${{ inputs.system == 'windows' }}
         shell: pwsh
         run: |
-          curl -o windows-binaries.zip ${{ inputs.customizedSdkUrl }}
+          curl -o windows-binaries.zip ${{ secrets.BASE_CONTAINER_URL }}${{ inputs.customizedSdkUrl }}${{ secrets.SAS_TOKEN }}
           Expand-Archive .\windows-binaries.zip .\tmp
           $variable = Get-ChildItem .\tmp\
           $variable = $variable.Basename
@@ -82,7 +82,7 @@ jobs:
         if: ${{ inputs.system != 'windows' }}
         with:
           jdksource: 'customized'
-          customizedSdkUrl: ${{ inputs.customizedSdkUrl }}
+          customizedSdkUrl: ${{ secrets.BASE_CONTAINER_URL }}${{ inputs.customizedSdkUrl }}${{ secrets.SAS_TOKEN }}
           aqa-testsRepo: ${{ inputs.aqatest-repo }}
           build_list: ${{ matrix.suite }}
           target: ${{ matrix.suite }} # parallellist to generate
@@ -116,7 +116,7 @@ jobs:
         if: ${{ inputs.system == 'windows' }}
         shell: pwsh
         run: |
-          curl -o windows-binaries.zip ${{ inputs.customizedSdkUrl }}
+          curl -o windows-binaries.zip ${{ secrets.BASE_CONTAINER_URL }}${{ inputs.customizedSdkUrl }}${{ secrets.SAS_TOKEN }}
           Expand-Archive .\windows-binaries.zip .\tmp
           $variable = Get-ChildItem .\tmp\
           $variable = $variable.Basename
@@ -162,7 +162,7 @@ jobs:
         if: ${{ inputs.system != 'windows' }}
         with:
           jdksource: 'customized'
-          customizedSdkUrl: ${{ inputs.customizedSdkUrl }}
+          customizedSdkUrl: ${{ secrets.BASE_CONTAINER_URL }}${{ inputs.customizedSdkUrl }}${{ secrets.SAS_TOKEN }}
           aqa-testsRepo: ${{ inputs.aqatest-repo }}
           build_list: ${{ matrix.suite }}
           target : -f parallelList.mk ${{ matrix.test_list }}
