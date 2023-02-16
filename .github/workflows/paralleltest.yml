@@ -59,7 +59,7 @@ jobs:
         if: ${{ inputs.system == 'windows' }}
         shell: pwsh
         run: |
-          curl -o windows-binaries.zip ${{ secrets.BASE_CONTAINER_URL }}${{ inputs.customizedSdkUrl }}${{ secrets.SAS_TOKEN }}
+          curl -o windows-binaries.zip "${{ secrets.BASE_CONTAINER_URL }}${{ inputs.customizedSdkUrl }}${{ secrets.SAS_TOKEN }}"
           Expand-Archive .\windows-binaries.zip .\tmp
           $variable = Get-ChildItem .\tmp\
           $variable = $variable.Basename
@@ -82,7 +82,7 @@ jobs:
         if: ${{ inputs.system != 'windows' }}
         with:
           jdksource: 'customized'
-          customizedSdkUrl: ${{ secrets.BASE_CONTAINER_URL }}${{ inputs.customizedSdkUrl }}${{ secrets.SAS_TOKEN }}
+          customizedSdkUrl: "${{ secrets.BASE_CONTAINER_URL }}${{ inputs.customizedSdkUrl }}${{ secrets.SAS_TOKEN }}"
           aqa-testsRepo: ${{ inputs.aqatest-repo }}
           build_list: ${{ matrix.suite }}
           target: ${{ matrix.suite }} # parallellist to generate
@@ -116,14 +116,14 @@ jobs:
         if: ${{ inputs.system == 'windows' }}
         shell: pwsh
         run: |
-          curl -o windows-binaries.zip ${{ secrets.BASE_CONTAINER_URL }}${{ inputs.customizedSdkUrl }}${{ secrets.SAS_TOKEN }}
+          curl -o windows-binaries.zip "${{ secrets.BASE_CONTAINER_URL }}${{ inputs.customizedSdkUrl }}${{ secrets.SAS_TOKEN }}"
           Expand-Archive .\windows-binaries.zip .\tmp
           $variable = Get-ChildItem .\tmp\
           $variable = $variable.Basename
           $variable = "${{ github.workspace }}\tmp\$variable"
           echo "TEST_JDK_HOME=$variable" >> $env:GITHUB_ENV
 
-          curl -o windows-testimage.zip ${{ inputs.testImage }}
+          curl -o windows-testimage.zip "${{ secrets.BASE_CONTAINER_URL }}${{ inputs.testImage }}${{ secrets.SAS_TOKEN }}"
           Expand-Archive .\windows-testimage.zip .\tmp-testimage
           $variable = Get-ChildItem .\tmp-testimage\
           $variable = $variable.Basename
@@ -135,7 +135,7 @@ jobs:
         if: ${{ inputs.system == 'linux' || inputs.system == 'macos' }}
         shell: bash
         run: |
-          curl -o jdk-binaries.tar.gz ${{ inputs.testImage }}
+          curl -o jdk-binaries.tar.gz "${{ secrets.BASE_CONTAINER_URL }}${{ inputs.testImage }}${{ secrets.SAS_TOKEN }}"
           mkdir ./tmp && tar xvf jdk-binaries.tar.gz -C ./tmp
           file_name=$(ls ./tmp)
           jdk_path="${{ github.workspace }}/tmp/$file_name"
@@ -162,7 +162,7 @@ jobs:
         if: ${{ inputs.system != 'windows' }}
         with:
           jdksource: 'customized'
-          customizedSdkUrl: ${{ secrets.BASE_CONTAINER_URL }}${{ inputs.customizedSdkUrl }}${{ secrets.SAS_TOKEN }}
+          customizedSdkUrl: "${{ secrets.BASE_CONTAINER_URL }}${{ inputs.customizedSdkUrl }}${{ secrets.SAS_TOKEN }}"
           aqa-testsRepo: ${{ inputs.aqatest-repo }}
           build_list: ${{ matrix.suite }}
           target : -f parallelList.mk ${{ matrix.test_list }}
