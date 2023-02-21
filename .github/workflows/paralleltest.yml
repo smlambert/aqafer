@@ -18,7 +18,7 @@ on:
         description: System being tested
         required: true
       pool:
-        description: runner
+        description: agent pool
         required: true
         type: string
         default: None
@@ -59,7 +59,7 @@ jobs:
         if: ${{ inputs.system == 'windows' }}
         shell: pwsh
         run: |
-          curl.exe -o windows-binaries.zip "${{ secrets.BASE_CONTAINER_URL }}${{ inputs.customizedSdkUrl }}${{ secrets.SAS_TOKEN }}"
+          curl.exe -o windows-binaries.zip "${{ secrets.BASE_CONTAINER_URL }}${{ inputs.customizedSdkUrl }}?${{ secrets.SAS_TOKEN }}"
           Expand-Archive .\windows-binaries.zip .\tmp
           $jdk_directory = Get-ChildItem .\tmp\
           $jdk_directory = $jdk_directory.Basename
@@ -71,7 +71,7 @@ jobs:
         if: ${{ inputs.system != 'windows' }}
         shell: bash
         run: |
-          curl -s -o ${{ inputs.system }}-binaries.tar.gz "${{ secrets.BASE_CONTAINER_URL }}${{ inputs.customizedSdkUrl }}${{ secrets.SAS_TOKEN }}"
+          curl -s -o ${{ inputs.system }}-binaries.tar.gz "${{ secrets.BASE_CONTAINER_URL }}${{ inputs.customizedSdkUrl }}?${{ secrets.SAS_TOKEN }}"
           mkdir tmp && tar -xzf ${{ inputs.system }}-binaries.tar.gz -C ./tmp
           jdk_directory=$(ls ./tmp)
           echo "TEST_JDK_HOME=${{ github.workspace }}/tmp/$jdk_directory" >> $GITHUB_ENV
@@ -113,7 +113,7 @@ jobs:
         if: ${{ inputs.system == 'windows' }}
         shell: pwsh
         run: |
-          curl.exe -o windows-binaries.zip "${{ secrets.BASE_CONTAINER_URL }}${{ inputs.customizedSdkUrl }}${{ secrets.SAS_TOKEN }}"
+          curl.exe -o windows-binaries.zip "${{ secrets.BASE_CONTAINER_URL }}${{ inputs.customizedSdkUrl }}?${{ secrets.SAS_TOKEN }}"
           Expand-Archive .\windows-binaries.zip .\tmp
           $jdk_directory = Get-ChildItem .\tmp
           $jdk_directory = $jdk_directory.Basename
@@ -132,7 +132,7 @@ jobs:
         if: ${{ inputs.system == 'linux' || inputs.system == 'macos' }}
         shell: bash
         run: |
-          curl -s -o ${{ inputs.system }}-binaries.tar.gz "${{ secrets.BASE_CONTAINER_URL }}${{ inputs.customizedSdkUrl }}${{ secrets.SAS_TOKEN }}"
+          curl -s -o ${{ inputs.system }}-binaries.tar.gz "${{ secrets.BASE_CONTAINER_URL }}${{ inputs.customizedSdkUrl }}?${{ secrets.SAS_TOKEN }}"
           mkdir tmp && tar -xzf ${{ inputs.system }}-binaries.tar.gz -C ./tmp
           jdk_directory=$(ls ./tmp)
           echo "TEST_JDK_HOME=${{ github.workspace }}/tmp/$jdk_directory" >> $GITHUB_ENV
