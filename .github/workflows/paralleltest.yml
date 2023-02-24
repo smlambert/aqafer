@@ -138,7 +138,7 @@ jobs:
           echo "TEST_JDK_HOME=${{ github.workspace }}/tmp/$jdk_directory" >> $GITHUB_ENV
 
           curl -s -o jdk-native-libs.tar.gz "${{ secrets.BASE_CONTAINER_URL }}${{ inputs.testImage }}${{ secrets.SAS_TOKEN }}"
-          mkdir ./tmp && tar xvf jdk-native-libs.tar.gz -C ./tmp-libs
+          mkdir ./tmp-libs && tar xvf jdk-native-libs.tar.gz -C ./tmp-libs
           file_name=$(ls ./tmp-libs)
           jdk_path="${{ github.workspace }}/tmp-libs/$file_name"
           echo "TESTIMAGE_PATH=$jdk_path" >> $GITHUB_ENV

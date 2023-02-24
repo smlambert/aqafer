@@ -93,9 +93,9 @@ jobs:
           echo "TEST_JDK_HOME=${{ github.workspace }}/tmp/$jdk_directory" >> $GITHUB_ENV
 
           curl -o jdk-native-libs.tar.gz "${{ secrets.BASE_CONTAINER_URL }}${{ inputs.testImage }}${{ secrets.SAS_TOKEN }}"
-          mkdir ./tmp && tar xvf jdk-native-libs.tar.gz -C ./tmp
-          file_name=$(ls ./tmp)
-          jdk_testimage="${{ github.workspace }}/tmp/$file_name"
+          mkdir ./tmp-libs && tar xvf jdk-native-libs.tar.gz -C ./tmp-libs
+          file_name=$(ls ./tmp-libs)
+          jdk_testimage="${{ github.workspace }}/tmp-libs/$file_name"
           echo "TESTIMAGE_PATH=$jdk_testimage" >> $GITHUB_ENV
 
       - name: Run AQA Docker Paralleltest ${{ matrix.suite }}_${{ matrix.test_list }}
