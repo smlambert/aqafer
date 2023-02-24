@@ -41,7 +41,7 @@ jobs:
           if [[ ${{ inputs.pool }} == "macos-arm64" ]]; then
             echo "config=['self-hosted', 'macOS', 'ARM64']" >> $GITHUB_OUTPUT
           fi
-          if [[ ${{ inputs.pool }} == "*windows2019-x64*" ]] || [[ ${{ inputs.pool }} == "*windows2022-aarch64*" ]] || [[ ${{ inputs.pool }} == "*ubuntu20.04-x64*" ]] || [[ ${{ inputs.pool }} == "*ubuntu20.04-aarch64*" ]]; then
+          if [[ ${{ inputs.pool }} == *"windows2019-x64"* ]] || [[ ${{ inputs.pool }} == *"windows2022-aarch64"* ]] || [[ ${{ inputs.pool }} == *"ubuntu20.04-x64"* ]] || [[ ${{ inputs.pool }} == *"ubuntu20.04-aarch64"* ]]; then
             echo "config=['self-hosted', '1ES.Pool=${{ inputs.pool }}']" >> $GITHUB_OUTPUT
           fi
 
