@@ -59,7 +59,7 @@ jobs:
         if: ${{ inputs.system == 'windows' }}
         shell: pwsh
         run: |
-          curl.exe -o windows-binaries.zip "${{ secrets.BASE_CONTAINER_URL }}${{ inputs.customizedSdkUrl }}${{ secrets.SAS_TOKEN }}"
+          curl -o windows-binaries.zip "${{ secrets.BASE_CONTAINER_URL }}${{ inputs.customizedSdkUrl }}?${{ secrets.SAS_TOKEN }}"
           Expand-Archive .\windows-binaries.zip .\tmp
           $jdk_directory = Get-ChildItem .\tmp\
           $jdk_directory = $jdk_directory.Basename
@@ -71,7 +71,7 @@ jobs:
         if: ${{ inputs.system != 'windows' }}
         shell: bash
         run: |
-          curl -s -o ${{ inputs.system }}-binaries.tar.gz "${{ secrets.BASE_CONTAINER_URL }}${{ inputs.customizedSdkUrl }}${{ secrets.SAS_TOKEN }}"
+          curl -LJSks -o ${{ inputs.system }}-binaries.tar.gz "${{ secrets.BASE_CONTAINER_URL }}${{ inputs.customizedSdkUrl }}?${{ secrets.SAS_TOKEN }}"
           mkdir tmp && tar -xzf ${{ inputs.system }}-binaries.tar.gz -C ./tmp
           jdk_directory=$(ls ./tmp)
           echo "TEST_JDK_HOME=${{ github.workspace }}/tmp/$jdk_directory" >> $GITHUB_ENV
@@ -113,14 +113,14 @@ jobs:
         if: ${{ inputs.system == 'windows' }}
         shell: pwsh
         run: |
-          curl.exe -o windows-binaries.zip "${{ secrets.BASE_CONTAINER_URL }}${{ inputs.customizedSdkUrl }}${{ secrets.SAS_TOKEN }}"
+          curl -o windows-binaries.zip "${{ secrets.BASE_CONTAINER_URL }}${{ inputs.customizedSdkUrl }}?${{ secrets.SAS_TOKEN }}"
           Expand-Archive .\windows-binaries.zip .\tmp
           $jdk_directory = Get-ChildItem .\tmp
           $jdk_directory = $jdk_directory.Basename
           $jdk_directory = "${{ github.workspace }}\tmp\$jdk_directory"
           echo "TEST_JDK_HOME=$jdk_directory" >> $env:GITHUB_ENV
 
-          curl.exe -o jdk-native-libs.zip "${{ secrets.BASE_CONTAINER_URL }}${{ inputs.testImage }}${{ secrets.SAS_TOKEN }}"
+          curl -o jdk-native-libs.zip "${{ secrets.BASE_CONTAINER_URL }}${{ inputs.testImage }}?${{ secrets.SAS_TOKEN }}"
           Expand-Archive .\jdk-native-libs.zip .\tmp-libs
           $jdk_testimage = Get-ChildItem .\tmp-libs
           $jdk_testimage = $jdk_testimage.Basename
@@ -132,12 +132,12 @@ jobs:
         if: ${{ inputs.system == 'linux' || inputs.system == 'macos' }}
         shell: bash
         run: |
-          curl -s -o ${{ inputs.system }}-binaries.tar.gz "${{ secrets.BASE_CONTAINER_URL }}${{ inputs.customizedSdkUrl }}${{ secrets.SAS_TOKEN }}"
+          curl -LJSks -o ${{ inputs.system }}-binaries.tar.gz "${{ secrets.BASE_CONTAINER_URL }}${{ inputs.customizedSdkUrl }}?${{ secrets.SAS_TOKEN }}"
           mkdir tmp && tar -xzf ${{ inputs.system }}-binaries.tar.gz -C ./tmp
           jdk_directory=$(ls ./tmp)
           echo "TEST_JDK_HOME=${{ github.workspace }}/tmp/$jdk_directory" >> $GITHUB_ENV
 
-          curl -s -o jdk-native-libs.tar.gz "${{ secrets.BASE_CONTAINER_URL }}${{ inputs.testImage }}${{ secrets.SAS_TOKEN }}"
+          curl -LJSks -o jdk-native-libs.tar.gz "${{ secrets.BASE_CONTAINER_URL }}${{ inputs.testImage }}?${{ secrets.SAS_TOKEN }}"
           mkdir ./tmp-libs && tar xvf jdk-native-libs.tar.gz -C ./tmp-libs
           file_name=$(ls ./tmp-libs)
           jdk_path="${{ github.workspace }}/tmp-libs/$file_name"
