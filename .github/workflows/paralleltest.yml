@@ -57,7 +57,7 @@ jobs:
       - name: Setup windows environment
         working-directory: ${{ github.workspace }}
         if: ${{ inputs.system == 'windows' }}
-        shell: pwsh
+        shell: powershell
         run: |
           curl -o windows-binaries.zip "${{ secrets.BASE_CONTAINER_URL }}${{ inputs.customizedSdkUrl }}?${{ secrets.SAS_TOKEN }}"
           Expand-Archive .\windows-binaries.zip .\tmp
@@ -111,7 +111,7 @@ jobs:
       - name: Setup windows environment
         working-directory: ${{ github.workspace }}
         if: ${{ inputs.system == 'windows' }}
-        shell: pwsh
+        shell: powershell
         run: |
           curl -o windows-binaries.zip "${{ secrets.BASE_CONTAINER_URL }}${{ inputs.customizedSdkUrl }}?${{ secrets.SAS_TOKEN }}"
           Expand-Archive .\windows-binaries.zip .\tmp
