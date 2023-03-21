@@ -43,7 +43,7 @@ jobs:
             test_lists.append(f"testList_{list}")
 
           with open(os.environ['GITHUB_OUTPUT'], 'a') as fh:
-            print(f"x={json.dumps(test_lists)}", file=fh)
+            print(f"testConfig={json.dumps(test_lists)}", file=fh)
 
   setup-parallel-docker:
     runs-on: ubuntu-latest

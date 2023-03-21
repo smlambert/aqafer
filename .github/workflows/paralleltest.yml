@@ -59,14 +59,14 @@ jobs:
             github_runner = "config='${{ inputs.pool }}'"
 
           with open(os.environ['GITHUB_OUTPUT'], 'a') as fh:
-            print("github_runner", file=fh)
+            print(github_runner, file=fh)
 
           # Generate the test lists
           for list in range(num_lists):
             test_lists.append(f"testList_{list}")
 
           with open(os.environ['GITHUB_OUTPUT'], 'a') as fh:
-            print(f"x={json.dumps(test_lists)}", file=fh)
+            print(f"testConfig={json.dumps(test_lists)}", file=fh)
 
   setup-parallel:
     runs-on: ${{ fromJSON(needs.configuration.outputs.agent-config) }}
