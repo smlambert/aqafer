@@ -82,7 +82,7 @@ jobs:
         if: ${{ inputs.system == 'windows' }}
         shell: powershell
         run: |
-          curl -o windows-binaries.zip "${{ secrets.BASE_CONTAINER_URL }}${{ inputs.customizedSdkUrl }}?${{ secrets.SAS_TOKEN }}"
+          curl.exe -o windows-binaries.zip "${{ secrets.BASE_CONTAINER_URL }}${{ inputs.customizedSdkUrl }}?${{ secrets.SAS_TOKEN }}"
           Expand-Archive .\windows-binaries.zip .\tmp
           $jdk_directory = Get-ChildItem .\tmp\
           $jdk_directory = $jdk_directory.Basename
@@ -136,14 +136,14 @@ jobs:
         if: ${{ inputs.system == 'windows' }}
         shell: powershell
         run: |
-          curl -o windows-binaries.zip "${{ secrets.BASE_CONTAINER_URL }}${{ inputs.customizedSdkUrl }}?${{ secrets.SAS_TOKEN }}"
+          curl.exe -o windows-binaries.zip "${{ secrets.BASE_CONTAINER_URL }}${{ inputs.customizedSdkUrl }}?${{ secrets.SAS_TOKEN }}"
           Expand-Archive .\windows-binaries.zip .\tmp
           $jdk_directory = Get-ChildItem .\tmp
           $jdk_directory = $jdk_directory.Basename
           $jdk_directory = "${{ github.workspace }}\tmp\$jdk_directory"
           echo "TEST_JDK_HOME=$jdk_directory" >> $env:GITHUB_ENV
 
-          curl -o jdk-native-libs.zip "${{ secrets.BASE_CONTAINER_URL }}${{ inputs.testImage }}?${{ secrets.SAS_TOKEN }}"
+          curl.exe -o jdk-native-libs.zip "${{ secrets.BASE_CONTAINER_URL }}${{ inputs.testImage }}?${{ secrets.SAS_TOKEN }}"
           Expand-Archive .\jdk-native-libs.zip .\tmp-libs
           $jdk_testimage = Get-ChildItem .\tmp-libs
           $jdk_testimage = $jdk_testimage.Basename
